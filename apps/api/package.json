@@ -1,0 +1,21 @@
+{
+  "name": "@arkaios/api",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch server/index.ts",
+    "build": "vite build --config vite.config.server.ts",
+    "start": "node dist/server/node-build.mjs"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.0",
+    "@arkaios/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.1",
+    "vite": "^5.4.8",
+    "typescript": "^5.6.2"
+  }
+}

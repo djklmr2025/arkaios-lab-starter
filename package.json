@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "shared"
+  ],
+  "scripts": {
+    "mcp": "node apps/mcp/server.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,4 @@
+nohup: ignoring input
+Booting ARKAIOS API…
+Calling createServer()…
+🚀 ARKAIOS API escuchando en http://0.0.0.0:8082
