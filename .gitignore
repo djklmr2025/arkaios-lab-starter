@@ -3,3 +3,4 @@ node_modules/
 
 # Ignorar archivos específicos de pnpm que a veces causan problemas
 .pnpm-store/
+.vercel

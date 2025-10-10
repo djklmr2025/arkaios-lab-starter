@@ -1,1 +1,11 @@
-services: []
+services:
+  - type: web
+    name: arkaios-api
+    env: node
+    plan: free
+    buildCommand: |
+      corepack enable
+      pnpm i --filter @arkaios/api --filter @arkaios/ui --filter . -w
+      pnpm --filter @arkaios/ui build
+    startCommand: pnpm --filter @arkaios/api exec tsx server/index.ts
+    autoDeploy: true
