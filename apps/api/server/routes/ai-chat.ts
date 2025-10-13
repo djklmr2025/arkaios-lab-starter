@@ -1,6 +1,5 @@
 // apps/api/server/routes/ai-chat.ts
 import type { Request, Response } from "express";
-import fetch from "node-fetch";
 
 export async function handleAiChat(req: Request, res: Response) {
   try {
