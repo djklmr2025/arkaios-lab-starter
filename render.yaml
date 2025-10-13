@@ -3,7 +3,7 @@ services:
     name: arkaios-api
     env: node
     plan: free
-    buildCommand: corepack enable && pnpm i -w --no-frozen-lockfile && pnpm --filter @arkaios/api build
+    buildCommand: npm i -g pnpm@9 && pnpm i -w --no-frozen-lockfile && pnpm --filter @arkaios/api build
     startCommand: pnpm --filter @arkaios/api start
     healthCheckPath: /health
     autoDeploy: true
