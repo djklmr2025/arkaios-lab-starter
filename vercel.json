@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "installCommand": "corepack enable && pnpm i -w",
+  "installCommand": "corepack enable && pnpm i -w --no-frozen-lockfile",
   "buildCommand": "corepack enable && pnpm i -w && pnpm --filter @arkaios/ui build",
   "outputDirectory": "apps/ui/dist",
   "rewrites": [
