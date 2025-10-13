@@ -7,7 +7,7 @@ services:
       corepack enable
       pnpm i -w
       pnpm --filter @arkaios/api build
-    startCommand: pnpm --filter @arkaios/api start
+    startCommand: pnpm --filter @arkaios/api exec tsx server/index.ts
     autoDeploy: true
     envVars:
       - key: AIDA_GATEWAY_URL

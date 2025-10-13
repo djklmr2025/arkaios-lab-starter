@@ -1,8 +1,10 @@
 {
+  "version": 2,
+  "installCommand": "corepack enable && pnpm i -w",
+  "buildCommand": "corepack enable && pnpm i -w && pnpm --filter @arkaios/ui build",
+  "outputDirectory": "apps/ui/dist",
   "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "https://builderos-lab.onrender.com/$1"
-    }
+    { "source": "/api/(.*)", "destination": "https://arkaios-api.onrender.com/api/$1" },
+    { "source": "/health", "destination": "https://arkaios-api.onrender.com/health" }
   ]
 }
