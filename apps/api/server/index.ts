@@ -21,6 +21,13 @@ export function createServer() {
   app.post("/api/chat", handleAiChat);
   app.get("/health", handleHealth);
 
+  // Landing simple en la raíz
+  app.get("/", (_req, res) => {
+    res.type("text/html").send(
+      "<!doctype html><html><head><meta charset='utf-8'><title>ArkAIOS API</title><style>body{font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:40px}code{background:#f6f8fa;padding:2px 6px;border-radius:4px}</style></head><body><h1>ArkAIOS API</h1><p>El servicio está activo.</p><p>Pruebas rápidas:</p><ul><li><code>GET /health</code></li><li><code>GET /api/demo</code></li></ul></body></html>"
+    );
+  });
+
   return app;
 }
 
