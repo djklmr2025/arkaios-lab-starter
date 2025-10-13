@@ -3,11 +3,9 @@ services:
     name: arkaios-api
     env: node
     plan: free
-    buildCommand: |
-      corepack enable
-      pnpm i -w
-      pnpm --filter @arkaios/api build
-    startCommand: pnpm --filter @arkaios/api exec tsx server/index.ts
+    buildCommand: corepack enable && pnpm i -w --no-frozen-lockfile && pnpm --filter @arkaios/api build
+    startCommand: pnpm --filter @arkaios/api start
+    healthCheckPath: /health
     autoDeploy: true
     envVars:
       - key: AIDA_GATEWAY_URL
