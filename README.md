@@ -53,4 +53,18 @@ Este repo incluye un daemon MCP mínimo por STDIO y un wrapper HTTP opcional.
 - El MCP intenta primero Gateway (`AIDA_*`) y cae a local (`LOCAL_BASE`) para chat.
 - `LOCAL_BASE` debe apuntar al backend del lab, por defecto `http://localhost:8080`.
 - El wrapper HTTP habilita CORS básico (`*`) para facilitar pruebas desde UI.
- - Usa Node ESM (Node >= 18); `apps/mcp/http.mjs` importa `node:http`.
+- Usa Node ESM (Node >= 18); `apps/mcp/http.mjs` importa `node:http`.
+
+## Ejecución permanente (PM2)
+
+- Archivo: `ecosystem.config.cjs` (incluido)
+- Scripts sugeridos:
+  - `pm2 start ecosystem.config.cjs --only mcp-http --update-env`
+  - `pm2 restart mcp-http`
+  - `pm2 logs mcp-http`
+- Variables de entorno a exportar antes de iniciar:
+  - `MCP_HTTP_PORT=8090`
+  - `LOCAL_BASE=http://localhost:8080` (o `http://127.0.0.1:3000` en dev)
+  - `AIDA_GATEWAY_URL=https://arkaios-gateway-open.onrender.com/aida/gateway`
+  - `AIDA_AUTH_TOKEN=<TOKEN>` (puede ser sólo el token o con prefijo `Bearer`)
+- Nota: el wrapper detecta si el token ya incluye `Bearer ` y evita duplicarlo.

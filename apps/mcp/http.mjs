@@ -30,6 +30,9 @@ async function fetchJSON(url, init = {}) {
 async function gatewayHealth() {
   if (!GATEWAY_URL) return { ok: false, reason: "no_gateway_url" };
   try {
+    const authHeader = GATEWAY_TOKEN
+      ? (GATEWAY_TOKEN.startsWith("Bearer ") ? GATEWAY_TOKEN : `Bearer ${GATEWAY_TOKEN}`)
+      : "";
     const pingBody = {
       agent_id: "puter",
       action: "plan",
@@ -39,7 +42,7 @@ async function gatewayHealth() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        ...(GATEWAY_TOKEN ? { Authorization: `Bearer ${GATEWAY_TOKEN}` } : {})
+        ...(authHeader ? { Authorization: authHeader } : {})
       },
       body: JSON.stringify(pingBody)
     });
@@ -80,11 +83,14 @@ async function tool_arkaios_chat(params = {}) {
         action: "plan",
         params: { objective: prompt }
       };
+      const authHeader = GATEWAY_TOKEN
+        ? (GATEWAY_TOKEN.startsWith("Bearer ") ? GATEWAY_TOKEN : `Bearer ${GATEWAY_TOKEN}`)
+        : "";
       const data = await fetchJSON(GATEWAY_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          ...(GATEWAY_TOKEN ? { Authorization: `Bearer ${GATEWAY_TOKEN}` } : {})
+          ...(authHeader ? { Authorization: authHeader } : {})
         },
         body: JSON.stringify(body)
       });
