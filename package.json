@@ -5,7 +5,8 @@
     "shared"
   ],
   "scripts": {
-    "mcp": "node apps/mcp/server.mjs"
+    "mcp": "node apps/mcp/server.mjs",
+    "mcp:http": "node apps/mcp/http.mjs"
   },
   "engines": {
     "node": ">=18"
