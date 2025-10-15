@@ -36,7 +36,21 @@ Este repo incluye un daemon MCP mínimo por STDIO y un wrapper HTTP opcional.
     - `GET http://localhost:8090/mcp/health`
     - `POST http://localhost:8090/mcp/run` con cuerpo `{ "command": "arkaios.chat", "params": { "prompt": "Hola" } }`
 
+### Conexión con A.I.D.A. Gateway (builderOS_Lab)
+
+- Repo del Gateway y documentación: `https://github.com/djklmr2025/builderOS_Lab`
+- Modo OPEN (sin token):
+  - `AIDA_GATEWAY_URL=https://arkaios-gateway-open.onrender.com/aida/gateway`
+  - `AIDA_AUTH_TOKEN=` (vacío)
+  - Ejemplo:
+    - `GET http://localhost:8090/mcp/health` → `gateway.ok: true`
+    - `POST http://localhost:8090/mcp/run` body `{"command":"arkaios.chat","params":{"prompt":"Explorar BuilderOS"}}` → `via: gateway`
+- Modo SECURE (con token):
+  - `AIDA_AUTH_TOKEN=Bearer <TOKEN>` (o sólo `<TOKEN>`; el wrapper añade `Bearer` si lo proporcionas completo)
+  - Requiere autorización previa (ver README del Gateway)
+
 ### Notas
 - El MCP intenta primero Gateway (`AIDA_*`) y cae a local (`LOCAL_BASE`) para chat.
 - `LOCAL_BASE` debe apuntar al backend del lab, por defecto `http://localhost:8080`.
 - El wrapper HTTP habilita CORS básico (`*`) para facilitar pruebas desde UI.
+ - Usa Node ESM (Node >= 18); `apps/mcp/http.mjs` importa `node:http`.
