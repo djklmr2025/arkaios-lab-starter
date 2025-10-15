@@ -96,3 +96,31 @@ Este repo incluye un daemon MCP mínimo por STDIO y un wrapper HTTP opcional.
 - Uso:
   - Haz doble clic sobre `start_pm2_both.bat` para lanzar backend + wrapper.
   - Si cambias `.env`, vuelve a ejecutar el script para refrescar configuración.
+
+### Reinicio por doble clic (Windows)
+
+- Script: `restart_pm2_both.bat`
+- Qué hace:
+  - Reinicia `cosmos-den` y `mcp-http` con `--update-env`.
+  - Si alguno no está en ejecución, lo inicia automáticamente usando el `ecosystem.config.cjs`.
+  - Ejecuta `pm2 save` para persistir el estado.
+- Uso:
+  - Doble clic sobre `restart_pm2_both.bat`.
+
+### Detener por doble clic (Windows)
+
+- Script: `stop_pm2_both.bat`
+- Qué hace:
+  - Detiene `cosmos-den` y `mcp-http` en PM2.
+  - Ejecuta `pm2 save` para persistir el estado detenido si usas `pm2-windows-startup`.
+- Uso:
+  - Doble clic sobre `stop_pm2_both.bat`.
+
+### Ver logs (Windows)
+
+- Script: `logs_pm2_both.bat`
+- Qué hace:
+  - Abre el streaming de logs de `cosmos-den` y `mcp-http` en la misma consola.
+- Uso:
+  - Doble clic sobre `logs_pm2_both.bat`.
+  - Cierra la ventana para detener el streaming.
