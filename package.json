@@ -10,7 +10,12 @@
     "pm2:start": "pm2 start ecosystem.config.cjs --only mcp-http --update-env",
     "pm2:restart": "pm2 restart mcp-http",
     "pm2:stop": "pm2 stop mcp-http",
-    "pm2:logs": "pm2 logs mcp-http"
+    "pm2:logs": "pm2 logs mcp-http",
+    "pm2:start:cosmos": "pm2 start ecosystem.config.cjs --only cosmos-den --update-env",
+    "pm2:restart:cosmos": "pm2 restart cosmos-den",
+    "pm2:stop:cosmos": "pm2 stop cosmos-den",
+    "pm2:logs:cosmos": "pm2 logs cosmos-den",
+    "pm2:start:both": "pm2 start ecosystem.config.cjs --update-env"
   },
   "engines": {
     "node": ">=18"

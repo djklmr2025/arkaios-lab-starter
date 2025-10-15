@@ -13,5 +13,15 @@ module.exports = {
         AIDA_AUTH_TOKEN: process.env.AIDA_AUTH_TOKEN || "",
       },
     },
+    {
+      name: "cosmos-den",
+      cwd: "..",
+      script: "dist/server/node-build.mjs",
+      instances: 1,
+      exec_mode: "fork",
+      env: {
+        NODE_ENV: process.env.NODE_ENV || "development",
+      },
+    },
   ],
 };

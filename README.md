@@ -62,9 +62,26 @@ Este repo incluye un daemon MCP mínimo por STDIO y un wrapper HTTP opcional.
   - `pm2 start ecosystem.config.cjs --only mcp-http --update-env`
   - `pm2 restart mcp-http`
   - `pm2 logs mcp-http`
+  - Arranque conjunto:
+    - `npm run pm2:start:both` (backend `cosmos-den` + wrapper `mcp-http`)
+    - `npm run pm2:start:cosmos` (sólo backend)
 - Variables de entorno a exportar antes de iniciar:
   - `MCP_HTTP_PORT=8090`
   - `LOCAL_BASE=http://localhost:8080` (o `http://127.0.0.1:3000` en dev)
   - `AIDA_GATEWAY_URL=https://arkaios-gateway-open.onrender.com/aida/gateway`
   - `AIDA_AUTH_TOKEN=<TOKEN>` (puede ser sólo el token o con prefijo `Bearer`)
 - Nota: el wrapper detecta si el token ya incluye `Bearer ` y evita duplicarlo.
+
+### Persistencia tras reinicios (Windows)
+
+- Guarda procesos actuales: `pm2 save`
+- Instala el inicio automático (Windows):
+  - `npm i -g pm2-windows-startup`
+  - `pm2-startup install`
+  - Esto crea una tarea programada que ejecuta `pm2 resurrect` al iniciar sesión.
+- Si cambias variables de entorno, reinicia procesos con `--update-env` y vuelve a ejecutar `pm2 save`.
+
+### Detalles del arranque conjunto
+
+- El backend `cosmos-den` se lanza vía PM2 apuntando al build `dist/server/node-build.mjs`.
+- Esto evita problemas con `npm.cmd` en Windows y garantiza un arranque estable.
