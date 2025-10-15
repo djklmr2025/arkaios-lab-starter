@@ -85,3 +85,14 @@ Este repo incluye un daemon MCP mínimo por STDIO y un wrapper HTTP opcional.
 
 - El backend `cosmos-den` se lanza vía PM2 apuntando al build `dist/server/node-build.mjs`.
 - Esto evita problemas con `npm.cmd` en Windows y garantiza un arranque estable.
+
+### Arranque por doble clic (Windows)
+
+- Script: `start_pm2_both.bat` (en la raíz del repo del lab)
+- Qué hace:
+  - Carga variables desde `.env` (ignora líneas con `#`).
+  - Define defaults (`MCP_HTTP_PORT`, `LOCAL_BASE`, `AIDA_GATEWAY_URL`) si faltan.
+  - Ejecuta `pm2 start ecosystem.config.cjs --update-env` y luego `pm2 save`.
+- Uso:
+  - Haz doble clic sobre `start_pm2_both.bat` para lanzar backend + wrapper.
+  - Si cambias `.env`, vuelve a ejecutar el script para refrescar configuración.
