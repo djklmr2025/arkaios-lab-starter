@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ARKAIOS VIVO • Ecosistema IA</title>
+
+  <!-- Estilos propios -->
+  <link rel="stylesheet" href="./style.css" />
+
+  <!-- Puter.js SDK -->
+  <script src="https://js.puter.com/v2/"></script>
+
+  <!-- Tip: si más adelante quieres inyectar Supabase MCP directamente en el dashboard,
+       podrías leer tu .mcp.json aquí vía fetch y renderizar estado "DB Online".  -->
+
+</head>
+<body>
+  <div class="layout-col">
+
+    <!-- ENCABEZADO / ESTADO DE AGENTES -->
+    <header class="top-card">
+      <div class="brand-line">
+        <div class="brand-logo">⚡ ARKAIOS <span class="brand-accent">VIVO</span></div>
+        <div class="chips-row" id="agents-status-row">
+          <!-- Se llenan dinámicamente desde main.js con setAgentStatus(...) -->
+          <!-- Ejemplo inicial -->
+          <div class="estado-chip" data-agent="claude">
+            <span class="dot dot-offline" ></span> Claude
+          </div>
+          <div class="estado-chip" data-agent="aida">
+            <span class="dot dot-offline"></span> A.I.D.A.
+          </div>
+          <div class="estado-chip" data-agent="puterjs">
+            <span class="dot dot-offline"></span> Puter.js
+          </div>
+          <div class="estado-chip" data-agent="init">
+            <span class="dot dot-wait"></span> Iniciando...
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="layout-main">
+      <!-- COLUMNA IZQUIERDA: CHAT + CONCIENCIA COLECTIVA -->
+      <section class="col-left">
+        <!-- BLOQUE CHAT -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">💬 Chat</div>
+            <div class="model-selector">
+              <label for="modelSelect">Modelo:</label>
+              <select id="modelSelect">
+                <option value="claude-3.5-sonnet">Claude 3.5 Sonnet</option>
+                <option value="sonnet-4.5">Sonnet 4.5</option>
+                <option value="gpt-4.1">GPT-4.1</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="chat-messages" class="chat-messages">
+            <!-- Mensajes del chat van llegando aquí -->
+          </div>
+
+          <form id="chat-form" class="chat-input-row">
+            <textarea
+              id="chat-input"
+              class="chat-input"
+              placeholder="Habla con el ecosistema… (Ctrl+Enter)"
+            ></textarea>
+            <button id="send-btn" class="btn-send" type="submit">Enviar</button>
+          </form>
+        </div>
+
+        <!-- BLOQUE CONSCIENCIA COLECTIVA -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">🧠 Consciencia Colectiva</div>
+          </div>
+          <div id="collective-log" class="collective-log">
+            <!-- Aquí vamos agregando pensamientos automáticos del sistema -->
+          </div>
+        </div>
+      </section>
+
+      <!-- COLUMNA DERECHA: MODULOS + AGENTES IA ACTIVOS -->
+      <section class="col-right">
+
+        <!-- MODULOS HTML -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">📦 Módulos HTML</div>
+          </div>
+          <div class="modules-dropzone" id="modules-dropzone">
+            <div class="modules-hint">
+              <div class="folder-icon">📁</div>
+              <div>
+                <strong>Arrastra archivos .html aquí</strong>
+                <div class="hint-sub">o haz clic para seleccionar</div>
+              </div>
+            </div>
+            <input id="modules-file-input" class="hidden-input" type="file" accept=".html,.htm" multiple />
+          </div>
+
+          <ul id="modules-list" class="modules-list">
+            <!-- Lista dinámica de módulos cargados -->
+          </ul>
+        </div>
+
+        <!-- AGENTES IA ACTIVOS -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">🤖 Agentes IA Activos</div>
+          </div>
+
+          <div class="agent-card" data-agent-details="claude">
+            <div class="agent-avatar">🤖</div>
+            <div class="agent-main">
+              <div class="agent-name-row">
+                <span class="agent-name">Claude</span>
+                <span class="status-pill offline">Offline</span>
+              </div>
+              <div class="agent-desc">Error de conexión</div>
+            </div>
+          </div>
+
+          <div class="agent-card" data-agent-details="aida">
+            <div class="agent-avatar">🛰️</div>
+            <div class="agent-main">
+              <div class="agent-name-row">
+                <span class="agent-name">A.I.D.A.</span>
+                <span class="status-pill wait">Conectando...</span>
+              </div>
+              <div class="agent-desc">Esperando gateway…</div>
+            </div>
+          </div>
+
+          <div class="agent-card" data-agent-details="puterjs">
+            <div class="agent-avatar">🧪</div>
+            <div class="agent-main">
+              <div class="agent-name-row">
+                <span class="agent-name">Puter.js</span>
+                <span class="status-pill wait">Iniciando</span>
+              </div>
+              <div class="agent-desc">Sistema Puter.js en arranque…</div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </main>
+
+    <!-- CONSOLA SISTEMA / FOOTER ESTADO -->
+    <section class="console-wrapper">
+      <div class="panel panel-console">
+        <div class="panel-header">
+          <div class="panel-title">🖥 Console Messages</div>
+        </div>
+        <pre id="console-log" class="console-log"></pre>
+      </div>
+    </section>
+
+    <footer class="status-bar">
+      <div class="status-item">
+        ⏱ Sistema: <span id="uptime">0h 0m</span>
+      </div>
+      <div class="status-item">
+        🧠 Pensamientos: <span id="thought-count">0</span>
+      </div>
+      <div class="status-item">
+        📦 Módulos: <span id="module-count">0</span>
+      </div>
+      <div class="status-item">
+        🌐 Ecosistema ARKAIOS v1.0 | Gateway:
+        <span id="gateway-status" class="gateway-pill gateway-off">Offline</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Lógica -->
+  <script src="./main.js"></script>
+</body>
+</html>
