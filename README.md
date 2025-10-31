@@ -124,3 +124,63 @@ Este repo incluye un daemon MCP mínimo por STDIO y un wrapper HTTP opcional.
 - Uso:
   - Doble clic sobre `logs_pm2_both.bat`.
   - Cierra la ventana para detener el streaming.
+
+---
+
+## Modo Builder y respuesta humanizada (local)
+
+El proxy local puede humanizar las respuestas del modelo `lab`, mostrando:
+- Objetivo
+- Texto principal
+- Acciones (enumeradas)
+- Notas/Límites
+- Estado del entorno (via: gateway | via: local)
+
+Prueba rápida (desde TRAE con Provider: OpenAI y Base URL: `http://localhost:4000/v1`):
+
+```
+Modo Builder: Resume y propone 3 acciones para presentar arkaios-lab-starter. Indica via: gateway o via: local.
+```
+
+Deberías recibir texto claro y el indicador de origen.
+
+## Flujo local recomendado
+
+1. MCP HTTP (puerto 8090):
+   - Variables (ver `.env.example`):
+     - `MCP_HTTP_PORT=8090`
+     - `AIDA_GATEWAY_URL=https://arkaios-gateway-open.onrender.com/aida/gateway`
+     - `AIDA_AUTH_TOKEN=` (opcional)
+     - `LOCAL_BASE=http://localhost:8080`
+   - Comando:
+     ```bash
+     npm run mcp:http
+     ```
+   - Health: `http://localhost:8090/mcp/health`
+
+2. Proxy (puerto 4000):
+   - En `arkaios-service-proxy`:
+     ```powershell
+     $env:PORT=4000; npm start
+     ```
+   - Health: `http://localhost:4000/v1/models`
+
+3. TRAE (selección del modelo):
+   - Settings > Models > Provider: OpenAI
+   - Model: `lab`
+   - Base URL: `http://localhost:4000/v1`
+
+4. Prueba en el chat con “Modo Builder”.
+
+## Script de lanzamiento TRAE
+
+En el directorio raíz (de IA ARKAIOS) hay un script `launch-trae-lab.ps1` que:
+- Verifica/instala el modelo `lab` en TRAE (`~/.trae/custom-models/lab.json`)
+- Comprueba el estado del Proxy y MCP
+- Puede iniciar ambos servicios si están apagados (ventanas separadas)
+- Abre los endpoints de salud y guía la selección del modelo en TRAE
+
+Ejemplo:
+```powershell
+./launch-trae-lab.ps1
+```
