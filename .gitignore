@@ -1,5 +1,12 @@
-# Ignorar la carpeta de dependencias de Node
+# Ignorar dependencias de Node (en cualquier subcarpeta)
 node_modules/
+**/node_modules/
+
+# Ignorar archivos de entorno (evitar secretos en el repo)
+.env
+**/.env
+.env.local
+**/.env.local
 
 # Ignorar archivos específicos de pnpm que a veces causan problemas
 .pnpm-store/
