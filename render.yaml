@@ -14,3 +14,22 @@ services:
         sync: false
       - key: SERVE_STATIC
         value: "false"
+
+  # Servicio MCP HTTP para fallback LAB desde arkaios-service-proxy
+  - type: web
+    name: arkaios-lab-mcp
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm run mcp:http
+    healthCheckPath: /mcp/health
+    autoDeploy: true
+    envVars:
+      - key: MCP_HTTP_PORT
+        value: "10000"
+      - key: AIDA_GATEWAY_URL
+        sync: false
+      - key: AIDA_AUTH_TOKEN
+        sync: false
+      - key: LOCAL_BASE
+        sync: false

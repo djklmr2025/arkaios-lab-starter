@@ -18,6 +18,33 @@ nuevo laboratorio
   - `GET https://<render>.onrender.com/health` debe responder `{"status":"ok"}`.
   - Desde Vercel, abre `/bridge.html` o la UI y prueba `POST /api/chat`.
 
+### Servicio MCP HTTP para fallback LAB (Render)
+
+El `render.yaml` ahora define un segundo servicio web:
+
+- `arkaios-lab-mcp`
+- Health check: `GET /mcp/health`
+- Endpoint MCP: `POST /mcp/run`
+
+Variables mínimas para `arkaios-lab-mcp`:
+
+- `MCP_HTTP_PORT=10000`
+- `AIDA_GATEWAY_URL=https://arkaios-gateway-open.onrender.com/aida/gateway`
+- `AIDA_AUTH_TOKEN=<token o vacio>`
+- `LOCAL_BASE=https://<arkaios-api>.onrender.com`
+
+Prueba esperada:
+
+- `GET https://<arkaios-lab-mcp>.onrender.com/mcp/health` responde `{"ok":true,...}`
+- `POST https://<arkaios-lab-mcp>.onrender.com/mcp/run` con
+  `{"command":"arkaios.chat","params":{"prompt":"hola"}}`
+
+Integracion con `arkaios-service-proxy`:
+
+- `LAB_MCP_BASE_URL=https://<arkaios-lab-mcp>.onrender.com`
+- `LAB_MCP_PATH=/mcp/run`
+- `LAB_MCP_RESP_PATH=result.reply.result.note|result.note|result.text|data.text|text|reply|response`
+
 ## MCP Daemon (STDIO) y Wrapper HTTP
 
 Este repo incluye un daemon MCP mínimo por STDIO y un wrapper HTTP opcional.
