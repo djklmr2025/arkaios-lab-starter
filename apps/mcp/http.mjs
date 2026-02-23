@@ -3,11 +3,17 @@
 // Node >=18: usa fetch global.
 
 const PORT = Number(process.env.MCP_HTTP_PORT || 8090);
-const GATEWAY_URL = process.env.AIDA_GATEWAY_URL?.trim() || "";
+const GATEWAY_URL =
+  process.env.COSMOS_GATEWAY_URL?.trim() ||
+  process.env.AIDA_GATEWAY_URL?.trim() ||
+  "";
 const GATEWAY_TOKEN = process.env.AIDA_AUTH_TOKEN?.trim() || "";
-const LOCAL_BASE = process.env.LOCAL_BASE?.trim() || "http://localhost:8080";
-const LOCAL_CHAT = `${LOCAL_BASE}/api/chat`;
-const LOCAL_HEALTH = `${LOCAL_BASE}/health`;
+const ENABLE_LOCAL_FALLBACK = /^(1|true|yes)$/i.test(
+  process.env.ENABLE_LOCAL_FALLBACK?.trim() || "false",
+);
+const LOCAL_BASE = process.env.LOCAL_BASE?.trim() || "";
+const LOCAL_CHAT = LOCAL_BASE ? `${LOCAL_BASE}/api/chat` : "";
+const LOCAL_HEALTH = LOCAL_BASE ? `${LOCAL_BASE}/health` : "";
 
 function json(res, status, data) {
   const body = JSON.stringify(data);
@@ -53,6 +59,12 @@ async function gatewayHealth() {
 }
 
 async function localHealth() {
+  if (!ENABLE_LOCAL_FALLBACK) {
+    return { ok: false, reason: "disabled" };
+  }
+  if (!LOCAL_HEALTH) {
+    return { ok: false, reason: "no_local_base" };
+  }
   try {
     await fetchJSON(LOCAL_HEALTH);
     return { ok: true };
@@ -76,6 +88,7 @@ async function tool_arkaios_chat(params = {}) {
   const prompt = String(params.prompt ?? "").trim();
   if (!prompt) return { error: "missing_prompt" };
 
+  let gatewayError = null;
   if (GATEWAY_URL) {
     try {
       const body = {
@@ -96,8 +109,29 @@ async function tool_arkaios_chat(params = {}) {
       });
       return { via: "gateway", reply: data };
     } catch (e) {
-      // fallback
+      gatewayError = String(e?.message || e);
     }
+  }
+
+  if (!ENABLE_LOCAL_FALLBACK) {
+    return {
+      via: "degraded",
+      error: "gateway_failed_no_local_fallback",
+      reason: gatewayError || "gateway_unavailable",
+      reply: {
+        message: "Servicio temporalmente saturado. Reintenta en 30-90 segundos.",
+      },
+    };
+  }
+  if (!LOCAL_CHAT) {
+    return {
+      via: "degraded",
+      error: "missing_local_base",
+      reason: gatewayError || "gateway_unavailable",
+      reply: {
+        message: "Servicio temporalmente saturado. Reintenta en 30-90 segundos.",
+      },
+    };
   }
 
   try {
@@ -108,7 +142,11 @@ async function tool_arkaios_chat(params = {}) {
     });
     return { via: "local", reply: data };
   } catch (e) {
-    return { error: "both_failed", reason: String(e?.message || e) };
+    return {
+      error: "both_failed",
+      reason: String(e?.message || e),
+      gateway_error: gatewayError,
+    };
   }
 }
 
