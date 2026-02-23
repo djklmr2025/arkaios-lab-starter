@@ -20,8 +20,8 @@ services:
     name: arkaios-lab-mcp
     env: node
     plan: free
-    buildCommand: npm install
-    startCommand: npm run mcp:http
+        buildCommand: npm i -g pnpm@9 && pnpm install --no-frozen-lockfile
+        startCommand: node apps/mcp/http.mjs
     healthCheckPath: /mcp/health
     autoDeploy: true
     envVars:
